@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan 2 Trailer Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="wrap">
+
+    <header class="header">
+        <div>
+            <div class="eyebrow">OPS · INBOUND SORT</div>
+            <h1>Scan 2 Trailer</h1>
+            <div id="dashboardSubtitle" class="subtitle">
+                Loading dashboard...
+            </div>
+        </div>
+
+        <div class="controls">
+
+            <div class="control">
+                <label for="dateSelect">DATE</label>
+                <select id="dateSelect"></select>
+            </div>
+
+            <div class="control">
+                <label for="shiftSelect">SHIFT</label>
+                <select id="shiftSelect"></select>
+            </div>
+
+            <button id="addDataButton" class="primary-button">
+                + Add Data
+            </button>
+             
+            
+
+        </div>
+    </header>
+
+    <section class="kpis">
+
+        <div class="kpi">
+            <div class="kpi-label">SCAN-TO-TRAILER %</div>
+            <div id="overallPercentage" class="kpi-value">--</div>
+            <div class="kpi-note">Volume-weighted performance</div>
+        </div>
+
+        <div class="kpi">
+            <div class="kpi-label">PARCELS</div>
+            <div id="totalParcels" class="kpi-value">--</div>
+            <div class="kpi-note">Total routed</div>
+        </div>
+
+        <div class="kpi">
+            <div class="kpi-label">SCANNED</div>
+            <div id="totalScanned" class="kpi-value">--</div>
+            <div class="kpi-note">Scan-to-trailer</div>
+        </div>
+
+        <div class="kpi">
+            <div class="kpi-label">MISSED SCANS</div>
+            <div id="totalMissed" class="kpi-value">--</div>
+            <div class="kpi-note">Total missed</div>
+        </div>
+
+        <div class="kpi">
+            <div class="kpi-label">BELOW SLA</div>
+            <div id="belowSla" class="kpi-value">--</div>
+            <div class="kpi-note">SLA: 98.4%</div>
+        </div>
+
+        <div class="kpi">
+            <div class="kpi-label">PEAK HOUR</div>
+            <div id="peakHour" class="kpi-value">--</div>
+            <div class="kpi-note">Highest missed scans</div>
+        </div>
+
+    </section>
+
+
+    <section class="chart-grid">
+
+        <div class="panel">
+
+            <div class="panel-header">
+                <div class="panel-title">Site Performance</div>
+                <div class="panel-note">SLA 98.4%</div>
+            </div>
+
+            <div id="performanceChart" class="performance-chart">
+                Loading...
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="panel-header">
+                <div class="panel-title">Missed Scans by Hour</div>
+                <div class="panel-note">Total missed</div>
+            </div>
+
+            <div id="hourChart" class="hour-chart-container">
+                Loading...
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+
+    <section class="panel">
+
+        <div class="site-header">
+
+            <div>
+                <div class="panel-title">Site Detail</div>
+                <div id="siteCount" class="site-count">
+                    0 sites
+                </div>
+            </div>
+
+            <div class="filters">
+
+                <input
+                    id="searchInput"
+                    type="text"
+                    placeholder="Search site..."
+                >
+
+                <label class="checkbox-label">
+
+                    <input
+                        id="belowSlaOnly"
+                        type="checkbox"
+                    >
+
+                    Below SLA only
+
+                </label>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ROUTING SVC</th>
+                        <th>PARCELS</th>
+                        <th>SCANNED</th>
+                        <th>SCAN-TO-TRAILER %</th>
+                        <th>STATUS</th>
+                        <th>MISSED</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="siteTableBody"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <footer>
+        <span>Scan 2 Trailer Operations Dashboard</span>
+        <span>HTML · CSS · JavaScript · Browser Storage</span>
+    </footer>
+
+</div>
+
+
+
+
+<div id="addDataModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <div>
+                <div class="eyebrow">DATA MANAGEMENT</div>
+
+                <h2>Add Shift Data</h2>
+
+                <p>
+                    Add a new date and shift to the dashboard.
+                </p>
+            </div>
+
+            <button
+                id="closeModalButton"
+                class="close-button"
+                type="button"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="form-grid">
+
+            <label>
+                Date
+
+                <input
+                    type="date"
+                    id="newDate"
+                >
+
+            </label>
+
+
+            <label>
+                Shift
+
+                <select id="newShift">
+
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+
+                </select>
+
+            </label>
+
+        </div>
+
+
+        <div class="data-help">
+
+            <strong>Paste site data</strong>
+
+            <p>
+                One site per line. Use this format:
+            </p>
+
+            <code>
+                Site | Parcels | Scanned | 07:00 | 08:00 | 09:00 | 10:00 | 11:00 | 12:00 | 13:00 | 14:00 | 15:00 | 16:00
+            </code>
+
+            <p>Example:</p>
+
+            <code>
+                Alfreton | 7137 | 6967 | 0 | 2 | 4 | 10 | 5 | 3 | 2 | 1 | 0 | 0
+            </code>
+
+        </div>
+
+
+        <textarea
+            id="newDataInput"
+            placeholder="Paste your site data here..."
+        ></textarea>
+
+
+        <div
+            id="importError"
+            class="import-error"
+        ></div>
+
+
+        <div class="modal-actions">
+
+            <button
+                id="cancelDataButton"
+                class="secondary-button"
+                type="button"
+            >
+                Cancel
+            </button>
+
+            <button
+                id="saveDataButton"
+                class="primary-button"
+                type="button"
+            >
+                Save Data
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
